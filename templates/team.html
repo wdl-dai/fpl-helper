@@ -1,0 +1,391 @@
+{% extends 'base.html' %}
+
+{% block title %}Team{% endblock %}
+
+{% block content %}
+<style>
+    .transfer-box {
+    background-color: #f9f9f9;
+    border: 2px solid #38003c;
+    border-radius: 15px;
+    padding: 20px;
+    margin-top: 30px;
+    width: 60%;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .transfer-box h3 {
+        margin-top: 0;
+        text-align: center;
+        font-family: 'Montserrat Alternates', sans-serif;
+        color: #38003c;
+    }
+
+    .transfer-box form {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        align-items: center;
+    }
+
+    .transfer-box label {
+        font-family: 'Montserrat Alternates', sans-serif;
+        font-weight: 600;
+        color: #38003c;
+    }
+
+    .transfer-box input,
+    .transfer-box select {
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-family: 'Montserrat Alternates', sans-serif;
+        width: 200px;
+    }
+
+    .transfer-box button {
+        background-color: #38003c;
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        font-family: 'Montserrat Alternates', sans-serif;
+        font-weight: 600;
+        transition: background-color 0.3s ease;
+    }
+
+    .transfer-box button:hover {
+        background-color: #4f0055;
+    }
+
+    .transfer-result {
+        text-align: center;
+        margin-top: 20px;
+        font-family: 'Montserrat Alternates', sans-serif;
+        color: #333;
+    }
+    .team-container {
+        margin-top: 5px;
+        height: 60%;
+        width: 60%;
+        margin-left: 10px;
+        margin-bottom: -10px;
+        position: relative;
+        border-color: #ccc;
+    }
+    .pitch-container {
+        margin-top: 5px;
+        height: 100%;
+        width: 100%;
+        position: relative;
+    }
+    .rectangle {
+        width: 100%;
+        height: 80px;
+        background-color: #38003c;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .bench-container {
+    display: flex;          
+    flex-wrap: nowrap;      
+    justify-content: center;
+    gap: 10px;              
+    margin-top: 20px;  
+    background-color: #ccc;    
+}
+
+    h1 {
+        font-size: 48px;
+        margin-top: 25px;
+        color: white;
+        text-align: center;
+        font-family: 'Montserrat Alternates', sans-serif;
+        font-weight: 900;
+        text-shadow: 1px 1px 0 #ffffff;
+        letter-spacing: 0.5px;
+    }
+
+    h2 {
+        color: #38003c;
+        font-family: 'Montserrat Alternates', sans-serif;
+        text-align: center;
+        margin-top: 30px;
+        font-size: 26px;
+        font-weight: 700;
+    }
+    h3 {
+        color: #38003c;
+        font-family: 'Montserrat Alternates', sans-serif;
+        text-align: left;
+        margin-top: 20px;
+        font-size: 26px;
+        font-weight: 600;
+    }
+
+    ul {
+        list-style-type: none;
+        padding-left: 20px;
+    }
+
+    /* Group players by their position */
+    .position-group {
+        display: flex;
+        justify-content: space-evenly;
+        margin: 30px 0;
+    }
+
+    .position-group div {
+        margin: 0 15px;
+        text-align: center;
+    }
+
+    .player-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 0; 
+    border-radius: 10px;
+    border: 2px solid white;
+    overflow: hidden; 
+    width: 80px; 
+    height: 90px; 
+}
+
+.player-box img {
+    width: 70px;
+    height: 70px; 
+}
+
+.player-box p {
+    width: 100%; 
+    margin-top: 0; 
+    font-size: 13px;
+    background-color: white;
+    padding: 5px;
+    font-family: 'Montserrat Alternates', sans-serif;
+    font-weight: 600;
+    text-align: center;
+    box-sizing: border-box; 
+}
+
+    .background-pitch {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: fill; 
+    z-index: 0;
+}
+
+    /* To ensure the players are on top of the pitch */
+    .players {
+        position: relative;
+        z-index: 1; 
+    }
+
+    .team-container {
+        position: relative;
+        z-index: 0;
+    }
+    details {
+        background-color: #f8f8f8;
+        border: 2px solid #ccc;
+        border-radius: 12px;
+        padding: 15px;
+        margin: 20px 0;
+        font-family: 'Montserrat Alternates', sans-serif;
+        box-shadow: 2px 2px 6px rgba(0,0,0,0.1);
+        transition: all 0.3s ease-in-out;
+        text-align: center;
+    }
+
+    summary {
+        font-size: 20px;
+        font-weight: 700;
+        color: #38003c;
+        cursor: pointer;
+        outline: none;
+    }
+
+    details[open] {
+        background-color: #f1f1f1;
+    }
+
+</style>
+
+<body>
+    <div class="rectangle">
+        <!--Header-->
+        <h1>Your FPL Team</h1>
+    </div>
+    <div class="team-container">
+        <!--Visually displaying the team with the pitch and kits-->
+        <h2>Gameweek {{CurrentGameweek+1}}</h2>
+        <div class="pitch-container">
+            <img src="{{url_for ('static', filename='pitch.png')}}" alt="FPL Logo" class="background-pitch" style="width: 101%; height: 110%; display: block; margin-left: 0.5%; z-index: -1;">
+
+            <!-- Goalkeeper Section -->
+            <div class="position-group">
+                {% for Player in StartingPlayers %}
+                    {% if Player['Position'] == 'Goalkeeper' %}
+                        <div class="player-box">
+                            <img src="{{url_for ('static', filename=Player['Team'] + 'gk.png')}}" alt="{{ Player['Name'] }}">
+                            <p>{{ Player['Name'] }}</p>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+            <!-- Defender Section -->
+            <div class="position-group">
+                {% for Player in StartingPlayers %}
+                    {% if Player['Position'] == 'Defender' %}
+                        <div class="player-box">
+                            <img src="{{url_for ('static', filename=Player['Team'] + '.png')}}" alt="{{ Player['Name'] }}">
+                            <p>{{ Player['Name'] }}</p>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+            <!-- Midfielder Section -->
+            <div class="position-group">
+                {% for Player in StartingPlayers %}
+                    {% if Player['Position'] == 'Midfielder' %}
+                        <div class="player-box">
+                            <img src="{{url_for ('static', filename=Player['Team'] + '.png')}}" alt="{{ Player['Name'] }}">
+                            <p>{{ Player['Name'] }}</p>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+            <!-- Forward Section -->
+            <div class="position-group">
+                {% for Player in StartingPlayers %}
+                    {% if Player['Position'] == 'Forward' %}
+                        <div class="player-box">
+                            <img src="{{url_for ('static', filename=Player['Team'] + '.png')}}" alt="{{ Player['Name'] }}">
+                            <p>{{ Player['Name'] }}</p>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+            <!-- Bench Section -->
+            <div class="position-group">
+                <div class = "bench-container">
+                {% for Player in BenchPlayers %}
+                    {% if Player['Position'] == 'Goalkeeper' %}
+                        <div class="player-box">
+                            <img src = "{{url_for ('static', filename=Player['Team'] + 'gk.png')}}" alt="{{ Player['Name'] }}">
+                            <p>{{ Player['Name'] }}</p>
+                        </div>
+                    {% else %}
+                        <div class="player-box">
+                            <img src="{{url_for ('static', filename=Player['Team'] + '.png')}}" alt="{{ Player['Name'] }}">
+                            <p>{{ Player['Name'] }}</p>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <p>‎ </p>
+    <p> ‎ </p>
+    <details>
+    <!--Injury and suspension alerts section-->
+    <summary>FPL Helper injury and suspension alerts</summary>
+
+    {% if InjuredPlayers|length == 1 %}
+        <p>{{InjuredPlayers[0]}} is injured currently so you should consider replacing him.</p>
+    {% elif InjuredPlayers|length > 1 %}
+        <p>{{ ', '.join(InjuredPlayers[:-1]) }} and {{ InjuredPlayers[-1] }} are injured currently so you should consider replacing them.</p>
+    {% else %}
+        <p>No players are injured currently.</p>
+    {% endif %}
+
+    {% if SuspendedPlayers|length == 1 %}
+        <p>{{ SuspendedPlayers[0] }} is suspended currently. You should consider replacing him.</p>
+    {% elif SuspendedPlayers|length > 1 %}
+        <p>{{ ', '.join(SuspendedPlayers[:-1]) }} and {{ SuspendedPlayers[-1] }} are suspended currently. You should consider replacing them.</p>
+    {% else %}
+        <p>No players are suspended currently.</p>
+    {% endif %}
+    </details>
+
+    <!--General advice section-->
+    <details>
+    <summary>FPL Helper's General Advice</summary>
+    <p>Based on recent stats, {{BestCaptainName}} looks like the best player to captain and {{BestViceCaptainName}} is the best player to vice captain.  </p>
+    <p>Based on the last 5 games, {{WorstRecentPlayer}} has been scoring the least points for you with {{WorstRecentPlayerPoints}} points and {{BestRecentPlayer}} has been your most inform player with {{BestRecentPlayerPoints}}.</p>
+    {% if PlayersToSwap|length == 1 %}
+        <p>Based on the amount of points your players are scoring recently, you should put {{PlayersToSwap[0]}} in your starting 11 and swap out {{PlayersToRemove[0]}} </p>
+    {% elif PlayersToSwap|length > 1 %}
+        <p>Based on the amount of points your players are scoring recently, you should put {{ ', '.join(PlayersToSwap[:-1]) }} and {{ PlayersToSwap[-1] }} in your starting 11 and swap out {{ ', '.join(PlayersToRemove[:-1]) }} and {{ PlayersToRemove[-1] }} </p>
+    {% endif %}
+    </details>
+
+    <!--Chip advice section-->
+    <details>
+    <summary>FPL Helper Chip advice</summary>
+
+    {% if NextDoubleGameweek %}
+        <p>You should use your triple captain chip on a double gameweek if you still have it. The next double gameweek is gameweek {{NextDoubleGameweek}}. </p>
+    {% else %}
+        <p>Usually it's best to use your triple captain on a double gameweek but there are none left this season so if you still have it use it in a gameweek where your captain has an easier fixture.</p>
+    {% endif %}
+
+    {% if UseWildcardOrFreeHit %}
+        {% if PoorPerformingPlayers > 3 %}
+        <p>Based on your current team, you should use your wildcard or free hit chip if you still have it as you have {{PoorPerformingPlayers}} players underperforming in your team including {{ ', '.join(PoorPerformingPlayersNames[:-1]) }} and {{ PoorPerformingPlayersNames[-1] }}. </p>
+        {% else %}
+        <p>Based on your current team, you should use your wildcard or free hit chip as you have more than 2 injured/suspended players.</p>
+        {% endif %}
+    {% else %}
+        <p>Based on your current team, you should not use your wildcard or free hit chip if you still have it as most of your players are doing well. </p>
+    {% endif %}
+
+    {% if UseBenchBoost %}
+        <p>Based on your current team, you should use your bench boost chip if you still have it as your bench is doing well. </p>
+    {% else %}
+        <p>Based on your current team, you should not use your bench boost chip if you still have it as your bench has scored low recently. </p>
+    {% endif %}
+    <p></p>
+    <p>You could use {{EasiestFixtureTeamManager}} if you want to use your assistant manager chip since he has the most favourable games coming up.</p>
+    </details>
+    <!--Transfer suggestions section-->
+    <div class="transfer-box">
+    <h3>FPL Helper transfer suggestions</h3>
+
+    <form method="POST">
+        <label for="UnwantedPlayer">Choose a player you want to replace</label>
+        <select name="UnwantedPlayer" id="UnwantedPlayer" required>
+            {% for Player in Forwards + Midfielders + Defenders + Goalkeeper + Bench %}
+                <option value="{{ Player }}">{{ Player }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="Budget">How much of your budget are you willing to spend?</label>
+        <input type="number" id="Budget" name="Budget" min="3.9" max="15.0" step="0.1" required>
+
+        <button type="submit">Submit</button>
+    </form>
+
+    {% if BestTransfer != None and BestTransfer != "No one" %}
+        <p class="transfer-result">Based on your budget of {{ Budget }} million, you could consider replacing {{ UnwantedPlayer }} with {{ BestTransfer }}.</p>
+    {% elif BestTransfer == "No one" %}
+        <p class="transfer-result">Based on your budget of {{ Budget }} million, you should not replace {{ UnwantedPlayer }} with anyone.</p>
+    {% endif %}
+    </div>
+
+{% endblock %}
+
+

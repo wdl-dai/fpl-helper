@@ -1,0 +1,152 @@
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #04f5ff, #00ff85);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+body h2 {
+    color: #38003c;
+}
+body p {
+    color: #38003c;
+}
+.flashes {
+    list-style-type: none;
+    color: #38003c;
+    position: fixed;
+    top: 20px;  
+    left: 50%; 
+    transform: translateX(-50%);
+    font-weight: bold;
+    width: auto;
+    max-width: 300px;
+    font-size: 12px;
+    z-index: 9999;  
+} 
+
+
+.login-page .flashes {
+    top: 405px;
+    left: 48.5%;
+    transform: translateX(-50%);
+    text-align: center;
+    color: #38003c; 
+    z-index: 9999;
+    font-size:11px;
+}
+
+.registration-page .flashes {
+    top: 440px;
+    left: 48.7%;
+    transform: translateX(-50%);
+    text-align: center;
+    color: #38003c; 
+    background-color: white;
+    z-index: 9999;
+}
+
+.resetpassword-page .flashes {
+    top: 470px;
+    left: 48.7%;
+    transform: translateX(-50%);
+    text-align: center;
+    color: #38003c; 
+    background-color: white;
+    z-index: 9999;
+    font-size:10px;
+}
+
+.flashes li {
+    margin: 1px 0;  
+}
+
+.login-container {
+    background-color: white;
+    padding: 10px 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.2);
+    width: 300px;
+    text-align: center;
+}
+
+.logo {
+    width: 100px;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+input[type="Username"],
+input[type="Password"],
+input[type="RecoveryCode"], 
+input[type="FPLTeamID"]{
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.login-page p{
+    font-family: 'Montserrat Alternates', sans-serif;
+    
+  }
+
+button {
+    width: 100%;
+    padding: 10px;
+    margin: 20px 0;
+    background-color: #04f5ff;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #00ff85;
+}
+
+.login-footer {
+    font-size: 0.9em;
+    color: #555;
+}
+
+.login-footer a {
+    color: #04f5ff;
+    text-decoration: none;
+}
+
+.login-footer a:hover {
+    text-decoration: underline;
+}
+
+.home-navbar a {
+    background: linear-gradient(90deg, #04f5ff, #00ff85);
+    display: flex;
+}
+
+body.home-page {
+    margin: 0;
+    padding: 0;
+    font-family: 'Montserrat Alternates', sans-serif;
+    background: white !important;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.Loading {
+    font-size:25px;
+    display:none;
+    color:#38003c;
+}
+

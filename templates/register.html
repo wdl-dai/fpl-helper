@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Page</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<style>
+  body {
+    background-color: #38003c;
+    font-family: 'Montserrat Alternates', sans-serif;
+  }
+  button[type="submit"] {
+    font-family: 'Montserrat Alternates', sans-serif;
+  }
+  input {
+        font-family: 'Montserrat Alternates', sans-serif;
+    }
+</style>
+<body class="registration-page">
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <ul class="flashes">
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
+    <div class="login-container">
+        <img src="{{ url_for('static', filename='premier_league_logo.png') }}" alt="Premier League Logo" class="logo">
+        <h2>Register</h2>
+        <!--User input-->
+        <form method="POST">
+            <input type="Username" name="Username" placeholder = "Username" minlength="5" maxlength="15" required>
+            <input type="Password" name="Password" placeholder = "Password" minlength="8" required>
+            <input type="Password" name="ConfirmPassword" placeholder = "Confirm Password" minlength="8" required>
+            <button type="submit">Register</button>
+        </form>
+        <div class="login-footer">
+          <!--Hyperlinks-->
+            <p><a href="/login">Login now</a></p>
+            <p><a href ="/resetpassword">Reset password</a></p>
+            <p>FPL Helper by Daiyan</p>
+        </div>
+    </div>
+</body>
+

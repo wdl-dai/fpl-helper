@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}Error{% endblock %}
+{% block content %}
+
+<style>
+    h1 {
+        color: #38003c;
+        text-align: center;
+        font-size: 25px;
+        font-weight:700;
+        font-family: 'Montserrat Alternates', sans-serif;
+    }
+</style>
+
+<div class="container">
+    <!-- Ensures user can still use the navbar after the error-->
+    <h1>{{ErrorMessage}}</h1>
+{% endblock %}

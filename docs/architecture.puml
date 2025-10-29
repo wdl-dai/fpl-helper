@@ -1,0 +1,122 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+package "Flask Application" {
+    class App {
+        + secret_key: str
+        + config: dict
+        + routes: ["/login", "/team", "/resetpassword", ...]
+    }
+
+    class LoginManager {
+        + login_view: str
+        + init_app(app: Flask)
+    }
+
+    class Scraper {
+        + Scraper()
+        + Scrape(url: str): dict
+        + GetPlayerID(PlayerName: str): int
+        + CheckPlayerStatus(PlayerID: int): str
+        + GetNextDoubleGameweek(): list
+    }
+
+    class SQLAlchemy {
+        + session: Session
+        + Model
+    }
+
+    class Bcrypt {
+        + generate_password_hash(password: str)
+        + check_password_hash(hash: str, password: str)
+    }
+
+    class Migrate {
+        + init_app(app: Flask, db: SQLAlchemy)
+    }
+
+    App --> LoginManager : "Manages Login"
+    App --> SQLAlchemy : "Manages Database"
+    App --> Bcrypt : "Handles Password Hashing"
+    App --> Migrate : "Handles DB Migrations"
+    App --> Scraper : "Uses for scraping"
+}
+
+package "Database Models" {
+    class FPLTeams {
+        + FPLTeamID: int
+        + Name: str
+    }
+
+    class Users {
+        + UserID: int
+        + Username: str
+        + Password: str
+        + FPLTeamID: int
+    }
+
+    class Fixtures {
+        + HomeTeam: int <<PK>>
+        + AwayTeam: int <<PK>>
+        + Gameweek: int
+        + HomeScore: int
+        + AwayScore: int
+    }
+
+    class RealTeams {
+        + TeamID: int <<PK>>
+        + Name: str
+        + Players: relationship
+    }
+
+   class Players {
+    + PlayerID: int <<PK>>
+    + TeamID: int
+    + Name: str
+    + Position: int
+    + Price: float
+}
+
+    class PlayerStats {
+    + PlayerID: int <<PK>>
+    + CurrentGameweek: int
+    + TeamRecentPoints: int
+    + NextFixtureDifficulty: int
+    + Goals: int
+    + Assists: int
+    + Points: int
+    + xG: float
+    + xA: float
+    + RecentGoals: int
+    + RecentAssists: int
+    + RecentPoints: int
+    + CleanSheets: int
+    + Saves: int
+    + PenaltySaves: int
+    + YellowCards: int
+    + RedCards: int
+    + Injured: bool
+    + Suspended: bool
+    + LastSeasonPoints: int
+    + LastSeasonGoals: int
+    + LastSeasonAssists: int
+    + LastSeasonCleanSheets: int
+}
+
+    SQLAlchemy --> FPLTeams : "Defines Model"
+    SQLAlchemy --> Users : "Defines Model"
+    SQLAlchemy --> Fixtures : "Defines Model"
+    SQLAlchemy --> RealTeams : "Defines Model"
+    SQLAlchemy --> Players : "Defines Model"
+    SQLAlchemy --> PlayerStats : "Defines Model"
+    Users --> UserMixin : "Inherits"
+    RealTeams --> Players : "Has Many"
+    Players --> PlayerStats : "Tracks Stats For"
+    Fixtures --> RealTeams : "Links Teams"
+    PlayerStats --> Players : "Belongs To"
+    Fixtures --> RealTeams : "Links Teams"
+    FPLTeams --> Users : "Links to Users"
+
+}
+
+@enduml
